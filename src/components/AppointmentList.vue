@@ -3,7 +3,7 @@
     <div class="list-group list-group-flush">
       <div
         class="list-group-item d-flex align-items-start"
-        v-for="item in appoinments"
+        v-for="item in appointments"
         :key="item.aptId"
       >
         <button class="mr-2 btn btn-sm btn-danger">
@@ -51,8 +51,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import moment from "moment";
 
 export default {
-  name: "AppoinmetnList",
-  props: ["appoinments"],
+  name: "AppointmentList",
+  props: ["appointments"],
   components: {
     FontAwesomeIcon,
   },
