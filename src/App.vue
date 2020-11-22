@@ -1,27 +1,33 @@
 <template>
-  <div id="app">
-    
+  <div id="main-app" class="container">
+    <h4>{{ title }}</h4>
+    <font-awesome-icon icon="plus" class="mr-2" />Add Appoinment
+    <appoinment-list :appoinments="appoinments" />
   </div>
 </template>
 
 <script>
-
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import axios from "axios";
+import AppoinmentList from "./components/AppoinmentList";
 
 export default {
-  name: "App",
+  name: "MainApp",
   components: {
-    
-  }
+    FontAwesomeIcon,
+    AppoinmentList,
+  },
+  data: function () {
+    return {
+      title: "Appointment List",
+      appoinments: [],
+    };
+  },
+  mounted() {
+    axios
+      .get("./data/appoinment.json")
+      .then((response) => (this.appoinments = response.data));
+  },
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
