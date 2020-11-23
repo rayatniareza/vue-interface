@@ -4,9 +4,15 @@
     <font-awesome-icon icon="plus" class="mr-2" />Add Appointment -->
     <div class="row justify-content-center">
       <add-appointment @add="addItem" />
-      <search-appointment @search="searchAppointment" />
+      <search-appointment
+        @search="searchAppointment"
+        :myKey="filterKey"
+        :myDir="filterDirection"
+        @change-key="changeFilterKey"
+        @change-dir="changeFilterDir"
+      />
       <appointment-list
-        :appointments="searchedAppointments"
+        :appointments="filteredAppointments"
         @remove="removeItem"
         @edit="editItem"
       />
@@ -34,6 +40,8 @@ export default {
       appointments: [],
       aptIndex: 0,
       searchTerm: "",
+      filterKey: "petName",
+      filterDirection: "asc",
     };
   },
   computed: {
@@ -46,8 +54,23 @@ export default {
         );
       });
     },
+    filteredAppointments: function () {
+      return _.orderBy(
+        this.searchedAppointments,
+        (item) => {
+          return item[this.filterKey].toLowerCase();
+        },
+        this.filterDirection
+      );
+    },
   },
   methods: {
+    changeFilterKey: function (key) {
+      this.filterKey = key;
+    },
+    changeFilterDir: function (dir) {
+      this.filterDirection = dir;
+    },
     searchAppointment: function (term) {
       this.searchTerm = term;
     },
