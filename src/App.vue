@@ -4,8 +4,9 @@
     <font-awesome-icon icon="plus" class="mr-2" />Add Appointment -->
     <div class="row justify-content-center">
       <add-appointment @add="addItem" />
+      <search-appointment @search="searchAppointment" />
       <appointment-list
-        :appointments="appointments"
+        :appointments="searchedAppointments"
         @remove="removeItem"
         @edit="editItem"
       />
@@ -14,26 +15,42 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+//import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import axios from "axios";
 import AppointmentList from "./components/AppointmentList";
 import _ from "lodash";
 import AddAppointment from "./components/AddAppointment";
+import SearchAppointment from "./components/SearchAppointment";
 export default {
   name: "MainApp",
   components: {
-    FontAwesomeIcon,
     AppointmentList,
     AddAppointment,
+    SearchAppointment,
   },
   data: function () {
     return {
       title: "Appointment List",
       appointments: [],
       aptIndex: 0,
+      searchTerm: "",
     };
   },
+  computed: {
+    searchedAppointments: function () {
+      return this.appointments.filter((item) => {
+        return (
+          item.petName.toLowerCase().match(this.searchTerm.toLowerCase()) ||
+          item.petOwner.toLowerCase().match(this.searchTerm.toLowerCase()) ||
+          item.aptNotes.toLowerCase().match(this.searchTerm.toLowerCase())
+        );
+      });
+    },
+  },
   methods: {
+    searchAppointment: function (term) {
+      this.searchTerm = term;
+    },
     addItem: function (apt) {
       apt.aptId = this.aptIndex;
       this.aptIndex++;
